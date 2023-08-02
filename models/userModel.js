@@ -1,38 +1,48 @@
-'use strict';
-const mongoose = require('mongoose'),
-const bcrypt = require('bcrypt'),
-  
-Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const Schema = mongoose.Schema;
 
-/**
- * User Schema
- */
 const UserSchema = new Schema({
-  fullName: {
+  username: {
     type: String,
-    trim: true,
-    required: true
+    required: true,
+    unique: true
   },
   email: {
     type: String,
-    unique: true,
-    lowercase: true,
-    trim: true,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
     required: true
   },
-  hash_password: {
-    type: String
+  role: {
+    type: String,
   },
-  created: {
-    type: Date,
-    default: Date.now
-  }, role: {
-    type: String
-  }
+  activities: [{ type: mongoose.Types.ObjectId, ref: 'Activity' }],
+
 });
+// secure password by hashing it
+UserSchema.pre(
+    'save',
+    async function(next) {
+      const user = this;
+      const hash = await bcrypt.hash(this.password, 12);
+  
+      this.password = hash;
+      next();
+    }
+  );
+// check if user is valid
+  UserSchema.methods.isValidPassword = async function(password) {
+    const user = this;
+    const compare = await bcrypt.compare(password, user.password);
+  
+    return compare;
+  }
+  
 
-UserSchema.methods.comparePassword = function(password) {
-  return bcrypt.compareSync(password, this.hash_password);
-};
+const UserModel = mongoose.model('User', UserSchema);
 
-mongoose.model('User', UserSchema);
+module.exports = UserModel;

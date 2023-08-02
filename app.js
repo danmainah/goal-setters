@@ -4,9 +4,16 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const db = require('./connectdb');
+const passport = require('passport');
+const session = require('express-session');
+
+
+
+require('./auth/auth');
 
 const indexRouter = require('./routes/index');
 const activityRouter = require('./routes/activityRoute');
+const userRouter = require('./routes/userRoute')
 
 const app = express();
 
@@ -15,13 +22,19 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'napenda',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.authenticate('session'));
 
 app.use('/', indexRouter);
 app.use('/activity', activityRouter);
+app.use('/', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
