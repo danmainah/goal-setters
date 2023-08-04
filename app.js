@@ -6,7 +6,8 @@ const logger = require('morgan');
 const db = require('./connectdb');
 const passport = require('passport');
 const session = require('express-session');
-
+const expressLayouts = require('express-ejs-layouts');
+const flash = require('connect-flash');
 
 
 require('./auth/auth');
@@ -19,17 +20,24 @@ const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+app.set('layout', './layout/main');
 app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.set('layout', './layouts/main');
+app.use(flash());
 
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+
 app.use(session({
   secret: 'napenda',
   resave: false,
   saveUninitialized: false
 }));
+
 app.use(passport.authenticate('session'));
 
 app.use('/', indexRouter);
@@ -51,5 +59,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+ 
 module.exports = app;

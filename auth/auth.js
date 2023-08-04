@@ -47,7 +47,13 @@ passport.use(
     
             return done(null, user);
           } catch (error) {
-            done(error);
+            if (error.code === 11000) {
+              // handle duplicate key error
+              return done(null , { message: 'User already registered' } );
+            } else {
+              // handle other errors
+              done(error);
+            }
           }
         }
       )

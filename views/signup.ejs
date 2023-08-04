@@ -1,4 +1,7 @@
 <h1>Sign up</h1>
+<% if (message.length > 0) { %>
+    <div class="alert alert-danger"><%= message %></div>
+  <% } %>
 <form action="/signup" method="post">
     <section>
         <label for="username">Fullname</label>
@@ -6,7 +9,7 @@
     </section>
     <section>
         <label for="email">Email</label>
-        <input id="email" name="email" type="text" autocomplete="email" required>
+        <input id="email" name="email" type="email" autocomplete="email">
     </section>
     <section>
         <label for="new-password">Password</label>

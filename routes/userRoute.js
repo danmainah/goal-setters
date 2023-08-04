@@ -1,23 +1,28 @@
 const express = require('express');
 const passport = require('passport');
+const activityController = require("../controllers/activityController");
 
 const router = express.Router();
- 
+
+router.get("/", activityController.getContent);
+
 router.get('/signup', function(req, res, next) {
-    res.render('signup');
-  });
+    res.render('signup', { message: req.flash('error') });
+});
 
 router.post(
   '/signup',
-  passport.authenticate('signup', { session: false }),
+  passport.authenticate('signup', { session: false, failureFlash: true }),
   async (req, res, next) => {
-    res.render({
-      message: 'Signup successful',
-      user: req.user
-    });
     res.redirect('/')
   }
 );
+
+
+
+router.get('/login', function(req, res, next) {
+    res.render('login');
+  });
 
 router.post(
     '/login',
@@ -27,8 +32,7 @@ router.post(
         async (err, user, info) => {
           try {
             if (err || !user) {
-              const error = new Error('An error occurred.');
-  
+              const error = new Error(info);
               return next(error);
             }
   
@@ -38,9 +42,9 @@ router.post(
               async (error) => {
                 if (error) return next(error);
   
-                const body = { email: user.email,  username: user.username };
+                // const body = { email: user.email,  username: user.username , title: "Logged in successfully"};
   
-                return res.render({ body });
+                return res.redirect('./');
               }
             );
           } catch (error) {
@@ -52,9 +56,7 @@ router.post(
   );
 
 router.post('/logout', function(req, res, next) {
-    req.logout(function(err) {
-      if (err) { return next(err); }
-      res.redirect('/');
-    });
+    req.logout();
+    res.redirect('/');
 });
 module.exports = router;
