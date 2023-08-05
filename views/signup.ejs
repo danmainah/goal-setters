@@ -2,6 +2,7 @@
 <% if (message.length > 0) { %>
     <div class="alert alert-danger"><%= message %></div>
   <% } %>
+  <!-- show any messages that come back with authentication -->
 <form action="/signup" method="post">
     <section>
         <label for="username">Fullname</label>
@@ -16,4 +17,5 @@
         <input id="new-password" name="password" type="password" autocomplete="new-password" required>
     </section>
     <button type="submit">Sign up</button>
+    <p>Already have an account? <a href="/login">Login</a></p>
 </form>

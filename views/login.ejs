@@ -1,5 +1,8 @@
 <div class="px-4 py-5 my-5 text-center">
     <h1 class="display-5 fw-bold">Login Here</h1>
+    <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+      <% } %>
     <div class="col-lg-3 mx-auto">
         <form action="/login" method="POST">
             <div class="mb-2">
@@ -12,5 +15,6 @@
             </div>
             <button type="submit" class="btn btn-primary mt-2">Submit</button>
         </form>
+
     </div>
 </div>

@@ -47,9 +47,9 @@ passport.use(
     
             return done(null, user);
           } catch (error) {
-            if (error.code === 11000) {
+            if (error.message && error.message.includes("E11000 duplicate key error")) {
               // handle duplicate key error
-              return done(null , { message: 'User already registered' } );
+              return done({ message: 'User already registered'} );
             } else {
               // handle other errors
               done(error);

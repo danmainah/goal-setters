@@ -8,13 +8,13 @@ const passport = require('passport');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');
-
-
 require('./auth/auth');
 
 const indexRouter = require('./routes/index');
 const activityRouter = require('./routes/activityRoute');
 const userRouter = require('./routes/userRoute')
+
+const UserModel = require('./models/userModel'); //import user model
 
 const app = express();
 
@@ -24,7 +24,6 @@ app.set('layout', './layout/main');
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', './layouts/main');
-app.use(flash());
 
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
@@ -38,11 +37,22 @@ app.use(session({
   saveUninitialized: false
 }));
 
-app.use(passport.authenticate('session'));
+// app.use(passport.authenticate('session')); // persistent login sessions
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+// Passport Local Strategy
+passport.use(UserModel.createStrategy());
+
+// To use with sessions
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
 
 app.use('/', indexRouter);
 app.use('/activity', activityRouter);
 app.use('/', userRouter);
+
+app.use('/user', passport.authenticate({ session: false }), indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
