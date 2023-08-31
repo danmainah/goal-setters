@@ -12,8 +12,7 @@ exports.createActivityGet = async (req, res) => {
 }
 
 exports.createActivityPost = async (req, res) => {
-  const id  = {"_id": new Objectid(req.user._id.toString())}
-  console.log(req.session)
+  const id = req.session.userId;
   const activity = new Activity({
     title: req.body.title,
     content: req.body.content,
@@ -33,7 +32,7 @@ exports.createActivityPost = async (req, res) => {
   activity.save()
     .then(() => {
         // Handle successful save
-        res.redirect('activity/:title');
+        res.redirect('/');
     })
     .catch(err => {
         // Handle error

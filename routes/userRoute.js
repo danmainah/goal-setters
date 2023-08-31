@@ -36,36 +36,18 @@ failureFlash : true // allow flash messages
 }));
  
 
-// router.post(
-//     '/login',
-//     async (req, res, next) => {
-//       passport.authenticate(
-//         'login',
-//         async (err, user, info) => {
-//           try {
-//             if (err || !user) {
-//               const error = new Error(info);
-//               return next(error);
-//             }
-  
-//             req.login(
-//               user,
-//               { session: false },
-//               async (error) => {
-//                 if (error) return next(error);
-  
-//                 // const body = { email: user.email,  username: user.username , title: "Logged in successfully"};
-  
-//                 return res.redirect('./');
-//               }
-//             );
-//           } catch (error) {
-//             return next(error);
-//           }
-//         }
-//       )(req, res, next);
-//     }
-//   );
+router.post('/login', (req, res, next) => {
+  passport.authenticate('login', (err, user, info) => {
+      if (err) { return next(err); }
+      if (!user) { return res.redirect('/login'); }
+      req.logIn(user, (err) => {
+          if (err) { return next(err); }
+          // Store the user's ID in the session
+          req.session.userId = user._id;
+          return res.redirect('/');
+      });
+  })(req, res, next);
+});
 
 router.post('/logout', function(req, res, next) {
     req.logout();
