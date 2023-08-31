@@ -32,7 +32,7 @@ exports.createActivityPost = async (req, res) => {
   activity.save()
     .then(() => {
         // Handle successful save
-        res.redirect('/');
+        res.redirect('/activity/:title');
     })
     .catch(err => {
         // Handle error
@@ -46,18 +46,35 @@ exports.createActivityPost = async (req, res) => {
 };
 
 exports.getActivity = async (req, res) => {
-  const content = await Activity.findById(req.params.id);
-  const title = req.params.title;
-  res.render('activity/:title', { content });
-  
+  const filter = { title: req.params.title };
+  const content = await Activity.findOne( filter);
+  res.render('activity/view', { content });
 };
 
-exports.updateActivity = async (req, res) => {
-  const Activity = await Activity.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
-  res.json(Activity);
+exports.updateActivityGet = async (req, res) => {
+  const filter = { title: req.params.title };
+  const content = await Activity.findOne(filter);
+  res.render('activity/edit', {content} )
+  console.log(content)
 };
+
+exports.updateActivityPost = async (req, res) => {
+    const title = req.body.title
+    const content = req.body.content
+    const category = req.body.category
+    const image = req.file.filename
+
+    Activity.findOneAndUpdate(title, { title: title , content: content, category: category,image: image}, (err, activity) => {
+      if (err) {
+          // Handle error
+          return (err)
+      } else {
+          // Redirect user back to form
+          res.redirect('/activity/' + activity.title);
+      }
+  });
+  }
+
 
 exports.deleteActivity = async (req, res) => {
   await Activity.findByIdAndDelete(req.params.id);

@@ -4,7 +4,9 @@
     <% } else { %>
         <% content.forEach(function(item) { %>
             <li>
-                <h1><%= item.title %></h1>
+                <a href="./activity/<%= item.title %>">
+                    <h1><%= item.title %></h1>
+                </a>
                 <img src="<%= item.image %>" alt="<%= item.title %>">
                 <p><%= item.content %></p>
             </li>

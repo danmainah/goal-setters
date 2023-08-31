@@ -41,7 +41,9 @@ router.post('/login', (req, res, next) => {
       if (err) { return next(err); }
       if (!user) { return res.redirect('/login'); }
       req.logIn(user, (err) => {
-          if (err) { return next(err); }
+          if (err) { 
+            return next(err); 
+          }
           // Store the user's ID in the session
           req.session.userId = user._id;
           return res.redirect('/');
