@@ -1,3 +1,13 @@
 <div>
-    <h2> <%= title %></h2>
+    <% if (content.length === 0) { %>
+        <p>No Activity found.</p>
+    <% } else { %>
+        <% content.forEach(function(item) { %>
+            <li>
+                <h1><%= item.title %></h1>
+                <img src="<%= item.image %>" alt="<%= item.title %>">
+                <p><%= item.content %></p>
+            </li>
+        <% }); %>
+    <% } %>
 </div>

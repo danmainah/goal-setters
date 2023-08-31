@@ -28,16 +28,20 @@ app.set('layout', './layouts/main');
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(passport.initialize());
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.use(session({
   secret: 'napenda',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+}
 }));
 
 // app.use(passport.authenticate('session')); // persistent login sessions
+app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
@@ -53,6 +57,7 @@ app.use('/activity', activityRouter);
 app.use('/', userRouter);
 
 app.use('/user', passport.authenticate({ session: false }), indexRouter);
+app.use('/activity', passport.authenticate({ session: false }), activityRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
