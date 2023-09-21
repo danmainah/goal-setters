@@ -9,6 +9,9 @@ const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');
 require('./auth/auth');
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo');
+const dbpath = require('./path');
 
 const app = express();
 
@@ -28,11 +31,10 @@ app.use(express.static(path.join(__dirname, 'uploads')));
 app.use(session({
   secret: 'napenda',
   resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
-}
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: dbpath })
 }));
+
 
 app.use(passport.authenticate('session')); // persistent login sessions
 app.use(passport.initialize());

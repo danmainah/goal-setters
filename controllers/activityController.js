@@ -55,7 +55,6 @@ exports.updateActivityGet = async (req, res) => {
   const filter = { title: req.params.title };
   const content = await Activity.findOne(filter);
   res.render('activity/edit', {content} )
-  console.log(content)
 };
 
 exports.updateActivityPost = async (req, res) => {
