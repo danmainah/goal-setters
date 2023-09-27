@@ -19,5 +19,6 @@ router.get("/add", activityController.createActivityGet);
 router.get("/:title", activityController.getActivity);
 router.get("/:title/edit", activityController.updateActivityGet);
 router.post("/:title/edit",upload.single('image'), activityController.updateActivityPost);
+router.delete("/:title", activityController.deleteActivity);
 
 module.exports = router;

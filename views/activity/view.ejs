@@ -5,3 +5,8 @@
 <a href="./<%= content.title %>/edit">
     <h1> Edit <%= content.title %></h1>
 </a>
+
+<form action="/activity/<%= content.title %>" method="POST">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit">Delete <%= content.title %></button>
+</form>

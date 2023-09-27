@@ -12,6 +12,8 @@ require('./auth/auth');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const dbpath = require('./path');
+const methodOverride = require('method-override');
+
 
 const app = express();
 
@@ -40,6 +42,7 @@ app.use(passport.authenticate('session')); // persistent login sessions
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(methodOverride('_method')); // allow Express to recognize the _method input in your form and treat the POST request as a DELETE request.
 
 const indexRouter = require('./routes/index');
 const activityRouter = require('./routes/activityRoute');

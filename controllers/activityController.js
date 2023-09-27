@@ -89,8 +89,14 @@ exports.updateActivityPost = async (req, res) => {
     }
 }
 
-
 exports.deleteActivity = async (req, res) => {
-  await Activity.findByIdAndDelete(req.params.id);
-  res.json({ message: 'Activity deleted' });
-};
+  const title = req.params.title;
+
+  try {
+      await Activity.findOneAndDelete({title: title});
+      const content = await Activity.find();
+      res.redirect('/', { content })
+  } catch (err) {
+      res.status(500).send(err);
+  }
+}
