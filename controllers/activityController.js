@@ -62,17 +62,32 @@ exports.updateActivityPost = async (req, res) => {
     const content = req.body.content
     const category = req.body.category
     const image = req.file.filename
-
-    Activity.findOneAndUpdate(title, { title: title , content: content, category: category,image: image}, (err, activity) => {
+    console.log(image)
+    Activity.findOneAndUpdate({title: title}, { title: title , content: content, category: category,image: image}, (err, activity) => {
       if (err) {
           // Handle error
-          return (err)
+
+          return (err) 
       } else {
           // Redirect user back to form
-          res.redirect('/activity/' + activity.title);
+          res.redirect('activity/view', { content });
       }
   });
   }
+
+  exports.updateActivityPost = async (req, res) => {
+    const title = req.body.title;
+    const content = req.body.content;
+    const category = req.body.category;
+    const image = req.file.filename;
+
+    try {
+        const activity = await Activity.findOneAndUpdate({title: title}, { title: title , content: content, category: category, image: image},{ new: true });
+        res.redirect('/');
+    } catch (err) {
+        res.status(500).send(err);
+    }
+}
 
 
 exports.deleteActivity = async (req, res) => {

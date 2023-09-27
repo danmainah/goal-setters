@@ -1,4 +1,4 @@
-<form action="/activity/edit" method="POST" enctype="multipart/form-data">
+<form action="/activity/<%= content.title %>/edit" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<%= content._id %>">
     <label for="title">Title:</label>
     <input type="text" id="title" name="title" value="<%= content.title %>" required>
@@ -10,7 +10,7 @@
     <textarea id="content" name="content" value="<%= content.content %>" required></textarea>
     <br>
     <label for="image">Image:</label>
-    <input type="file" id="image" name="image" value="<%= content.image %>"  accept="image/*">
+    <input type="file" id="image" name="image" value="<%= content.image %>"  accept="image/*" required>
     <br>
     <input type="submit" value="Submit">
 </form>
