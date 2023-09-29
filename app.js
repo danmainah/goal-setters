@@ -57,15 +57,19 @@ passport.use(UserModel.createStrategy());
 passport.serializeUser(UserModel.serializeUser());
 passport.deserializeUser(UserModel.deserializeUser());
 
+  /// add middleware to check if user is authenticated
+  const checkauthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return next();
+    } else {
+      // Redirect user to login page
+      res.redirect('/login');
+    }
+  }
+
 app.use('/', indexRouter);
-app.use('/activity', activityRouter);
+app.use('/activity',checkauthenticated, activityRouter);
 app.use('/', userRouter);
-
-// app.use('/user', passport.authenticate({ session: false }), indexRouter);
-// app.use('/activity', passport.authenticate({ session: false }), activityRouter);
-
-app.use('/user', passport.authenticate('login',), indexRouter);
-app.use('/activity', passport.authenticate('login'), activityRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

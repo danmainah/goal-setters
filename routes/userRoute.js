@@ -29,12 +29,6 @@ router.get('/login', function(req, res, next) {
     res.render('login', { message: req.flash('error') });
   });
 
-router.post('/login', passport.authenticate('login',{
-successRedirect : '/', //redirect to the secure profile section
-failureRedirect : '/login', // redirect back to the signup page if there is an error
-failureFlash : true // allow flash messages
-}));
- 
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('login', (err, user, info) => {

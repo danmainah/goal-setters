@@ -10,6 +10,16 @@
         crossorigin="anonymous"></script>
   </head>
   <body>
+    <nav class="flex items-center justify-between p-4 bg-gray-800 text-white">
+      <div class="flex items-center">
+        <a href="/" class="text-xl font-bold">My Blog</a>
+      </div>
+      <div class="flex space-x-4">
+        <a href="/" class="hover:bg-gray-700 px-3 py-2 rounded">Home</a>
+        <a href="/activity/add" class="hover:bg-gray-700 px-3 py-2 rounded">Add New Post</a>
+        <a href="/category/add" class="hover:bg-gray-700 px-3 py-2 rounded">Add Category</a>
+      </div>
+    </nav>    
     <%- body %>
   </body>
 </html>

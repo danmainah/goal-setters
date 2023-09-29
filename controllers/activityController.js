@@ -38,11 +38,6 @@ exports.createActivityPost = async (req, res) => {
         // Handle error
         return(err);
     });
-  // activity.save(function (err) {
-  //   if (err) { return next(err); }
-  //      //successful - redirect to new activity record.
-  //      res.redirect(activity.url);
-  //   });
 };
 
 exports.getActivity = async (req, res) => {
@@ -57,23 +52,22 @@ exports.updateActivityGet = async (req, res) => {
   res.render('activity/edit', {content} )
 };
 
-exports.updateActivityPost = async (req, res) => {
-    const title = req.body.title
-    const content = req.body.content
-    const category = req.body.category
-    const image = req.file.filename
-    console.log(image)
-    Activity.findOneAndUpdate({title: title}, { title: title , content: content, category: category,image: image}, (err, activity) => {
-      if (err) {
-          // Handle error
+// exports.updateActivityPost = async (req, res) => {
+//     const title = req.body.title
+//     const content = req.body.content
+//     const category = req.body.category
+//     const image = req.file.filename
+//     Activity.findOneAndUpdate({title: title}, { title: title , content: content, category: category,image: image}, (err, activity) => {
+//       if (err) {
+//           // Handle error
 
-          return (err) 
-      } else {
-          // Redirect user back to form
-          res.redirect('activity/view', { content });
-      }
-  });
-  }
+//           return (err) 
+//       } else {
+//           // Redirect user back to form
+//           res.redirect('activity/view', { activity });
+//       }
+//   });
+//   }
 
   exports.updateActivityPost = async (req, res) => {
     const title = req.body.title;
@@ -82,7 +76,7 @@ exports.updateActivityPost = async (req, res) => {
     const image = req.file.filename;
 
     try {
-        const activity = await Activity.findOneAndUpdate({title: title}, { title: title , content: content, category: category, image: image},{ new: true });
+       await Activity.findOneAndUpdate({title: title}, { title: title , content: content, category: category, image: image},{ new: true });
         res.redirect('/');
     } catch (err) {
         res.status(500).send(err);
@@ -94,8 +88,7 @@ exports.deleteActivity = async (req, res) => {
 
   try {
       await Activity.findOneAndDelete({title: title});
-      const content = await Activity.find();
-      res.redirect('/', { content })
+      res.redirect('/')
   } catch (err) {
       res.status(500).send(err);
   }
