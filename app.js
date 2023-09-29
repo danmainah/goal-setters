@@ -44,9 +44,11 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(methodOverride('_method')); // allow Express to recognize the _method input in your form and treat the POST request as a DELETE request.
 
+// importing routes
 const indexRouter = require('./routes/index');
 const activityRouter = require('./routes/activityRoute');
-const userRouter = require('./routes/userRoute')
+const userRouter = require('./routes/userRoute');
+const categoryRouter = require('./routes/categoryRoute');
 
 const UserModel = require('./models/userModel'); //import user model
 
@@ -68,7 +70,8 @@ passport.deserializeUser(UserModel.deserializeUser());
   }
 
 app.use('/', indexRouter);
-app.use('/activity',checkauthenticated, activityRouter);
+app.use('/activity', checkauthenticated, activityRouter);
+app.use('/category', checkauthenticated, categoryRouter)
 app.use('/', userRouter);
 
 // catch 404 and forward to error handler

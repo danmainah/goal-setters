@@ -1,0 +1,11 @@
+<div>
+    <% if (content.length === 0) { %>
+        <p>No Category found.</p>
+    <% } else { %>
+        <% content.forEach(function(item) { %>
+            <li>
+                <h1><%= item.category %></h1>
+            </li>
+        <% }); %>
+    <% } %>
+</div>

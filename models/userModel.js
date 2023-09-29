@@ -22,7 +22,7 @@ const UserSchema = new Schema({
     type: String,
   },
   activities: [{ type: mongoose.Types.ObjectId, ref: 'Activity' }],
-
+  categories: [{ type: mongoose.Types.ObjectId, ref: 'Category' }],
 });
 // secure password by hashing it
 UserSchema.pre(
