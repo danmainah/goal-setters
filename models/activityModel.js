@@ -19,8 +19,8 @@ const activitySchema = new mongoose.Schema({
         type: String,
     },
     // LATER ADD USER FOR EACH ACTIVITY
-    // author: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
-    author: { type: mongoose.Types.ObjectId, ref: 'User'},
+    author: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
+    // author: { type: mongoose.Types.ObjectId, ref: 'User'},
     comments: [{ type: mongoose.Types.ObjectId, ref: 'Comments' }],
     reading_time: {
       type: String,

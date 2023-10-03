@@ -8,32 +8,33 @@ exports.getCategory = async (req, res) => {
 };
 
 exports.createCategoryGet = async (req, res) => {
+  console.log("imeload")
   res.render('category/add', { title: 'Create Category'});
 }
 
 exports.createCategoryPost = async (req, res) => {
-  const id = req.session.userId;
-  const category = new Category({
-    category: req.body.category,
-    author: id,
-  });
-
-  //add category to  user categories array
-  await category.save();
-  await User.findOneAndUpdate(
-    { _id: id },
-    { $push: { categories: category } },
-  )
-
-  category.save()
-    .then(() => {
-        // Handle successful save
-        res.redirect('category');
-    })
-    .catch(err => {
-        // Handle error
-        return(err);
+  console.log(req.body)
+  try {
+    const id = req.session.userId;
+    const category = new Category({
+      category: req.body.category,
+      author: id,
     });
+    //add category to user categories array
+    console.log(category)
+    await category.save();
+    await User.findOneAndUpdate(
+      { _id: id },
+      { $push: { categories: category } },
+    )
+
+    // Handle successful save
+    res.redirect('category');
+  } catch (err) {
+    // Handle error
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
 };
 
 
