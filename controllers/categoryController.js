@@ -8,12 +8,10 @@ exports.getCategory = async (req, res) => {
 };
 
 exports.createCategoryGet = async (req, res) => {
-  console.log("imeload")
   res.render('category/add', { title: 'Create Category'});
 }
 
 exports.createCategoryPost = async (req, res) => {
-  console.log(req.body)
   try {
     const id = req.session.userId;
     const category = new Category({
@@ -21,7 +19,6 @@ exports.createCategoryPost = async (req, res) => {
       author: id,
     });
     //add category to user categories array
-    console.log(category)
     await category.save();
     await User.findOneAndUpdate(
       { _id: id },
@@ -44,15 +41,16 @@ exports.updateCategoryGet = async (req, res) => {
   res.render('category/edit', {content} )
 };
 
-  exports.updateCategoryPost = async (req, res) => {
-    const category = req.body.category;
+exports.updateCategoryPost = async (req, res) => {
+  const category = req.params.category;
+  const newCategory = req.body.category;
 
-    try {
-       await Category.findOneAndUpdate({category: category}, { category: category },{ new: true });
-        res.redirect('/category/view');
-    } catch (err) {
-        res.status(500).send(err);
-    }
+  try {
+    await Category.findOneAndUpdate({category: category}, { category: newCategory },{ new: true });
+      res.redirect('/category');
+  } catch (err) {
+      res.status(500).send(err);
+  }
 }
 
 exports.deleteCategory = async (req, res) => {
@@ -60,7 +58,7 @@ exports.deleteCategory = async (req, res) => {
 
   try {
       await Category.findOneAndDelete({category: category});
-      res.redirect('/')
+      res.redirect('/category')
   } catch (err) {
       res.status(500).send(err);
   }

@@ -1,6 +1,6 @@
 const Activity = require('../models/activityModel')
 const User = require('../models/userModel')
-const Objectid = require('mongodb').ObjectId;
+const Category = require('../models/categoryModel')
 
 exports.getContent = async (req, res) => {
   const content = await Activity.find();
@@ -8,11 +8,23 @@ exports.getContent = async (req, res) => {
 };
 
 exports.createActivityGet = async (req, res) => {
-  res.render('activity/add', { title: 'Create Activity'});
-}
+  try {
+    const categories = await Category.find();
+    res.render('activity/add', { title: 'Create Activity', categories: categories });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while fetching categories');
+  }
+};
 
 exports.createActivityPost = async (req, res) => {
   const id = req.session.userId;
+  const category = await Category.findById(req.body.category);
+  
+  if (!category) {
+    return res.redirect('./category/add');
+  }
+
   const activity = new Activity({
     title: req.body.title,
     content: req.body.content,
@@ -21,23 +33,23 @@ exports.createActivityPost = async (req, res) => {
     author: id,
   });
 
-  //add Activity yo user Activities array
-  await activity.save();
-  //add post yo user posts array
-  await User.findOneAndUpdate(
-    { _id: id },
-    { $push: { activities: activity } },
-  )
+  try {
+    // Save the activity
+    await activity.save();
+    
+    // Add post to user posts array
+    await User.findOneAndUpdate(
+      { _id: id },
+      { $push: { activities: activity } },
+    )
 
-  activity.save()
-    .then(() => {
-        // Handle successful save
-        res.redirect('/activity/:title');
-    })
-    .catch(err => {
-        // Handle error
-        return(err);
-    });
+    // Redirect after successful save
+    res.redirect('./');
+  } catch (err) {
+    // Handle error
+    console.error(err);
+    res.status(500).send('An error occurred while creating the activity');
+  }
 };
 
 exports.getActivity = async (req, res) => {
@@ -52,24 +64,7 @@ exports.updateActivityGet = async (req, res) => {
   res.render('activity/edit', {content} )
 };
 
-// exports.updateActivityPost = async (req, res) => {
-//     const title = req.body.title
-//     const content = req.body.content
-//     const category = req.body.category
-//     const image = req.file.filename
-//     Activity.findOneAndUpdate({title: title}, { title: title , content: content, category: category,image: image}, (err, activity) => {
-//       if (err) {
-//           // Handle error
-
-//           return (err) 
-//       } else {
-//           // Redirect user back to form
-//           res.redirect('activity/view', { activity });
-//       }
-//   });
-//   }
-
-  exports.updateActivityPost = async (req, res) => {
+exports.updateActivityPost = async (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const category = req.body.category;

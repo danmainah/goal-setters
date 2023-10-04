@@ -21,7 +21,6 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('layout', './layout/main');
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressLayouts);
 app.set('layout', './layouts/main');
 

@@ -5,6 +5,14 @@
         <% content.forEach(function(item) { %>
             <li>
                 <h1><%= item.category %></h1>
+                <a href="./category/<%= item.category %>/edit">
+                    <h1> Edit <%= content.title %></h1>
+                </a>
+                
+                <form action="/category/<%= item.category %>" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete <%= item.category %></button>
+                </form>
             </li>
         <% }); %>
     <% } %>
