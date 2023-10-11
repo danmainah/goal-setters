@@ -7,14 +7,14 @@
     <br>
     <label for="category">Category:</label>
     <select id="category" name="category" required>
-        <option value="love">Select a category</option>>
+        <option >Select a category</option>>
         <% categories.forEach(function(category) { %>
             <option value="<%= category.category %>" required><%= category.category %></option>
         <% }); %>
     </select>
     <br>
-    <label for="image">Image:</label>
-    <input type="file" id="image" name="image" accept="image/*" required>
+    <label for="photos">Photos:</label>
+    <input type="file" id="photos" name="photos" accept="image/*" multiple>
     <br>
     <input type="submit" value="Submit">
 </form>

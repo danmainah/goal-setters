@@ -14,9 +14,7 @@ const activitySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    image: {
-        type: String,
-    },
+    photos:[String],
     // LATER ADD USER FOR EACH ACTIVITY
     author: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
     // author: { type: mongoose.Types.ObjectId, ref: 'User'},

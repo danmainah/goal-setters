@@ -20,16 +20,20 @@ exports.createActivityGet = async (req, res) => {
 exports.createActivityPost = async (req, res) => {
   const id = req.session.userId;
   const category = await Category.findById(req.body.category);
-  
+
   if (!category) {
     return res.redirect('./category/add');
+  }
+  // Validate input
+  if (!req.body.title || !req.body.content || !req.body.category || !req.file) {
+    return res.status(400).send('All fields are required');
   }
 
   const activity = new Activity({
     title: req.body.title,
     content: req.body.content,
     category: req.body.category,
-    image: req.file.filename,
+    photos: req.files.map(file => file.filename),
     author: id,
   });
 
@@ -68,10 +72,10 @@ exports.updateActivityPost = async (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const category = req.body.category;
-    const image = req.file.filename;
+    const photos = req.files.map(file => file.filename);
 
     try {
-       await Activity.findOneAndUpdate({title: title}, { title: title , content: content, category: category, image: image},{ new: true });
+       await Activity.findOneAndUpdate({title: title}, { title: title , content: content, category: category, photos: photos},{ new: true });
         res.redirect('/');
     } catch (err) {
         res.status(500).send(err);
